@@ -14,7 +14,7 @@ resource "aws_key_pair" "login" {
 # 2. Public Bastion Host EC2 (For SSH access)
 # Creates a single instance in the first public subnet.
 resource "aws_instance" "bastion" {
-  ami           = data.aws_ami.amazon_linux.id
+  ami           = data.aws_ami.ubuntu.id
   instance_type = var.bastion_instance_type
   subnet_id     = element(var.public_subnet_ids, 0) # Place in first public subnet
   key_name      = aws_key_pair.login.key_name
@@ -38,7 +38,7 @@ resource "aws_eip" "bastion_eip" {
 # 4. Private App Servers EC2 (2 instances, one in each private subnet)
 resource "aws_instance" "app_servers" {
   count         = 2
-  ami           = data.aws_ami.amazon_linux.id
+  ami           = data.aws_ami.ubuntu.id
   instance_type = var.app_instance_type
   subnet_id     = element(var.private_subnet_ids, count.index)
   key_name      = aws_key_pair.login.key_name
