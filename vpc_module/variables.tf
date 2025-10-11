@@ -1,7 +1,7 @@
 variable "aws_region" {
   description = "The AWS region to deploy resources in."
   type        = string
-  default     = "us-east-1"
+  default     = "eu-north-1"
 }
 
 variable "vpc_cidr" {
@@ -23,9 +23,9 @@ variable "private_subnets_cidr" {
 }
 
 variable "ami_id" {
-  description = "AMI ID for the EC2 instances (Amazon Linux 2)."
+  description = "AMI ID for the EC2 instances (ubuntu t3.micro)."
   type        = string
-  # This AMI ID (ami-053b0d534c0e663a8) is for Amazon Linux 2 in us-east-1, verify if using a different region.
-  default     = "ami-053b0d534c0e663a8"
+  # This AMI ID (ami-0a716d3f3b16d290c) is for ubuntu in eu-north-1, verify if using a different region.
+  default     = "ami-0a716d3f3b16d290c"
 }
 

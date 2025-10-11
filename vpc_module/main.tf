@@ -220,7 +220,7 @@ resource "aws_security_group" "private_sg2" {
 # Public EC2 Instance (The Jump Box)
 resource "aws_instance" "public_ec2" {
   ami           = var.ami_id
-  instance_type = "t2.micro"
+  instance_type = "t3.micro"
   subnet_id     = aws_subnet.public[0].id
   key_name      = aws_key_pair.login_key.key_name
 
@@ -247,7 +247,7 @@ resource "aws_eip" "public_ec2_eip" {
 # Private EC2 Instance (Backend Server)
 resource "aws_instance" "private_ec2" {
   ami           = var.ami_id
-  instance_type = "t2.micro"
+  instance_type = "t3.micro"
   subnet_id     = aws_subnet.private[0].id
   key_name      = aws_key_pair.login_key.key_name
 
