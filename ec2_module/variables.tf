@@ -1,35 +1,42 @@
 variable "project_name" {
-  description = "Name used for tagging resources."
+  description = "Prefix for all resources."
   type        = string
 }
 
-variable "vpc_id" {
-  description = "The ID of the VPC to launch instances into."
-  type        = string
-}
-
-variable "private_subnets" {
-  description = "List of private subnet IDs for the EC2 instances."
+variable "public_subnet_ids" {
+  description = "List of public subnet IDs for the bastion host."
   type        = list(string)
 }
 
-variable "instance_type" {
-  description = "The EC2 instance type."
+variable "private_subnet_ids" {
+  description = "List of private subnet IDs for app servers."
+  type        = list(string)
+}
+
+variable "public_sg_id" {
+  description = "ID of the public security group for bastion."
   type        = string
 }
 
-variable "key_name" {
-  description = "The key pair name for SSH access."
+variable "private_sg_id" {
+  description = "ID of the private security group for app servers."
   type        = string
 }
 
-variable "alb_target_group_arn" {
-  description = "The ARN of the ALB target group to attach instances to."
+variable "target_group_arn" {
+  description = "ARN of the ALB Target Group to register app servers."
   type        = string
 }
 
-variable "user_data" {
-  description = "Startup script to install web server."
+variable "bastion_instance_type" {
+  description = "EC2 instance type for the bastion host."
   type        = string
+  default     = "t3.nano"
+}
+
+variable "app_instance_type" {
+  description = "EC2 instance type for the application servers."
+  type        = string
+  default     = "t3.micro"
 }
 

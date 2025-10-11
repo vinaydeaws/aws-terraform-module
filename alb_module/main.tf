@@ -1,14 +1,14 @@
-# ------------------------------------------------------------------
-# SECURITY GROUP for ALB
-# ------------------------------------------------------------------
-# Allows HTTP traffic from anywhere on the internet
-resource "aws_security_group" "alb" {
+# This module creates an Internet-facing ALB and a target group for port 80.
+
+# 1. ALB Security Group
+resource "aws_security_group" "alb_sg" {
   name        = "${var.project_name}-alb-sg"
-  description = "Allow HTTP inbound traffic to ALB"
+  description = "Allows HTTP/HTTPS access from the internet to the ALB."
   vpc_id      = var.vpc_id
 
+  # Ingress: HTTP (Port 80) from Internet
   ingress {
-    description = "HTTP access from anywhere"
+    description = "HTTP from Internet"
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
@@ -26,16 +26,14 @@ resource "aws_security_group" "alb" {
   }
 }
 
-# ------------------------------------------------------------------
-# APPLICATION LOAD BALANCER
-# ------------------------------------------------------------------
+# 2. Application Load Balancer (ALB)
 resource "aws_lb" "main" {
   name               = "${var.project_name}-alb"
-  internal           = false
+  internal           = false # Internet-facing
   load_balancer_type = "application"
-  security_groups    = [aws_security_group.alb.id]
-  subnets            = var.public_subnets # ALB must sit in public subnets
-
+  security_groups    = [aws_security_group.alb_sg.id]
+  # ALB must be in the public subnets
+  subnets            = var.public_subnet_ids
   enable_deletion_protection = true
 
   tags = {
@@ -43,35 +41,44 @@ resource "aws_lb" "main" {
   }
 }
 
-# ------------------------------------------------------------------
-# TARGET GROUP
-# ------------------------------------------------------------------
+# 3. Target Group (for private EC2 instances on port 80)
 resource "aws_lb_target_group" "main" {
   name     = "${var.project_name}-tg"
-  port     = var.target_port
+  port     = 80
   protocol = "HTTP"
   vpc_id   = var.vpc_id
 
   health_check {
     path = "/"
-    port = "traffic-port"
+    protocol = "HTTP"
+    matcher = "200"
   }
+
   tags = {
     Name = "${var.project_name}-tg"
   }
 }
 
-# ------------------------------------------------------------------
-# LISTENER
-# ------------------------------------------------------------------
+# 4. Listener (Listens on port 80 and forwards to the Target Group)
 resource "aws_lb_listener" "http" {
   load_balancer_arn = aws_lb.main.arn
-  port              = "80"
+  port              = 80
   protocol          = "HTTP"
 
   default_action {
-    type             = "forward"
     target_group_arn = aws_lb_target_group.main.arn
+    type             = "forward"
   }
+}
+
+# 5. Add Ingress Rule to Private SG for ALB Traffic
+resource "aws_security_group_rule" "allow_http_from_alb" {
+  type                     = "ingress"
+  from_port                = 80
+  to_port                  = 80
+  protocol                 = "tcp"
+  security_group_id        = var.private_sg_id # The private SG created by the VPC module
+  source_security_group_id = aws_security_group.alb_sg.id # The SG created here
+  description              = "Allow HTTP from ALB SG"
 }
 
