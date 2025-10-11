@@ -29,7 +29,7 @@ resource "aws_instance" "bastion" {
 # 3. EIP for Public Bastion Host (Reallocateable)
 resource "aws_eip" "bastion_eip" {
   instance = aws_instance.bastion.id
-  vpc      = true
+  domain      = "vpc"
   tags = {
     Name = "${var.project_name}-bastion-eip"
   }
