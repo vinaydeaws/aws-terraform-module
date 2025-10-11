@@ -78,7 +78,7 @@ resource "aws_subnet" "private" {
 
 # EIP for NAT Gateway (Must be in a public subnet)
 resource "aws_eip" "nat" {
-  domain        = vpc
+  domain        = "vpc"
   depends_on = [aws_internet_gateway.igw]
   tags       = { Name = "NAT-Gateway-EIP" }
 }
@@ -238,7 +238,7 @@ resource "aws_instance" "public_ec2" {
 
 # EIP for Public EC2 (Reallocateable)
 resource "aws_eip" "public_ec2_eip" {
-  domain        = vpc
+  domain        = "vpc"
   instance   = aws_instance.public_ec2.id
   depends_on = [aws_internet_gateway.igw]
   tags       = { Name = "Public-EC2-EIP" }
