@@ -31,7 +31,7 @@ variable "target_group_arn" {
 variable "bastion_instance_type" {
   description = "EC2 instance type for the bastion host."
   type        = string
-  default     = "t3.nano"
+  default     = "t3.micro"
 }
 
 variable "app_instance_type" {
