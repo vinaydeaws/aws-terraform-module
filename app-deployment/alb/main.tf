@@ -20,8 +20,8 @@ module "alb" {
 
   project_name = var.project_name
   # Use the outputs from the network's state file
-  vpc_id       = data.terraform_remote_state.network.outputs.vpc_id
-  public_subnet_ids = data.terraform_remote_state.network.outputs.public_subnet_ids
-  private_sg_id     = data.terraform_remote_state.network.outputs.private_sg_id
+  vpc_id       = data.terraform_remote_state.vpc.outputs.vpc_id
+  public_subnet_ids = data.terraform_remote_state.vpc.outputs.public_subnet_ids
+  private_sg_id     = data.terraform_remote_state.vpc.outputs.private_sg_id
 }
 
