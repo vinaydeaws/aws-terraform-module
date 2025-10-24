@@ -2,3 +2,5 @@
 remote_backend_creation_s3_db
 .terraform.*
 .terraform/
+.terraform.lock.hcl
+.gitignore
