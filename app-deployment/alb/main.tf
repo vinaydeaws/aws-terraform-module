@@ -16,7 +16,7 @@ data "terraform_remote_state" "vpc" {
 
 module "alb" {
   # YOU MUST REPLACE THIS with your actual GitHub URL
-  source = "git::https://github.com/vinaydeaws/aws-terraform-module.git//alb_module?ref=main"
+  source = "git::https://github.com/vinaydeaws/aws-terraform-module.git//modules/alb_module?ref=main"
 
   project_name = var.project_name
   # Use the outputs from the network's state file

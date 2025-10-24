@@ -6,7 +6,7 @@ provider "aws" {
 
 module "vpc" {
   # YOU MUST REPLACE THIS with your actual GitHub URL
-  source = "git::https://github.com/vinaydeaws/aws-terraform-module.git//vpc_module?ref=main"
+  source = "git::https://github.com/vinaydeaws/aws-terraform-module.git//modules/vpc_module?ref=main"
 
   project_name = var.project_name
   cidr_block   = "10.0.0.0/16"

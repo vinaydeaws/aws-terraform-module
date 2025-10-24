@@ -26,7 +26,7 @@ data "terraform_remote_state" "ALB" {
 
 module "ec2" {
   # YOU MUST REPLACE THIS with your actual GitHub URL
-  source = "git::https://github.com/vinaydeaws/aws-terraform-module.git//ec2_module?ref=main"
+  source = "git::https://github.com/vinaydeaws/aws-terraform-module.git//modules/ec2_module?ref=main"
 
   project_name       = var.project_name
   public_subnet_ids  = data.terraform_remote_state.vpc.outputs.public_subnet_ids
